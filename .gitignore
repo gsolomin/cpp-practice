@@ -1,5 +1,7 @@
 cmake*
 build
 asan*
+debug
+release
 .DS_Store
 .idea
