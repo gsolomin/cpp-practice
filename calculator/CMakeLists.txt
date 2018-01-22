@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS_ASAN "-g -fsanitize=address,undefined -fno-sanitize-recover=
 #### GTest
 
 enable_testing()
-add_subdirectory(libs/googletest/googletest)
+add_subdirectory(../googletest/googletest bin)
 #include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 add_executable(test_calculator test/test.cpp)
