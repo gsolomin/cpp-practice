@@ -4,7 +4,7 @@ project(reduce)
 include(../CMakeLists.txt)
 
 include_directories(include)
-set(LIB_SOURCES src/commons.cpp include/reduce.h)
+set(LIB_SOURCES src/commons.cpp)
 
 add_library(reduce_lib ${LIB_SOURCES})
 
