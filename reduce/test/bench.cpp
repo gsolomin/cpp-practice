@@ -1,5 +1,4 @@
 #include <benchmark/benchmark.h>
-//#include <benchmark_api.h>
 #include <cstdint>
 #include <vector>
 #include <algorithm>

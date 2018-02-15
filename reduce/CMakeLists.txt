@@ -13,6 +13,4 @@ add_executable(test_reduce test/test.cpp)
 target_link_libraries(test_reduce gtest gtest_main)
 target_link_libraries(test_reduce reduce_lib)
 
-add_benchmark(bench_reduce test/run.cpp ${LIB_SOURCES})
-# add_executable(bench_reduce test/run.cpp)
-# target_link_libraries(bench_reduce reduce_lib benchmark pthread)
+add_benchmark(bench_reduce test/bench.cpp ${LIB_SOURCES})
