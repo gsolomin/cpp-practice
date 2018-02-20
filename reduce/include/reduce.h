@@ -4,6 +4,8 @@
 #include <thread>
 #include <iterator>
 
+const int kNumberOfThreads = 8;
+
 template<class RandomAccessIterator, class T, class Func>
 void reduceImpl(RandomAccessIterator first, RandomAccessIterator last, Func func, T* result) {
     auto cur_value(*result);
@@ -18,23 +20,29 @@ T reduce(RandomAccessIterator first, RandomAccessIterator last, const T &initial
 
     size_t length = std::distance(first, last);
 
-    T tmp_results[] = {initial_value,initial_value,initial_value,initial_value};
+    std::vector<T> tmp_results;
+    tmp_results.resize(kNumberOfThreads);
 
-    if(length > 4){
+    std::fill(tmp_results.begin(),tmp_results.end(),initial_value);
+
+    if(length > 2*kNumberOfThreads){
         std::vector<std::thread> threads;
-        threads.reserve(4);
-        for(int i =0; i < 4; ++i){
+
+        for(int i =0; i < kNumberOfThreads; ++i){
             threads.emplace_back(reduceImpl<RandomAccessIterator,T,Func>,
-                                 first+length*i/4, first+length*(i+1)/4, func, &tmp_results[i]);
+                                 first+length*i/kNumberOfThreads, first+length*(i+1)/kNumberOfThreads, func, &tmp_results[i]);
         }
 
-        for(int i =0; i < 4; ++i) {
-            threads[i].join();
+        for(auto&& thr : threads) {
+            thr.join();
         }
 
-        result =  func(tmp_results[0],
-                       func(tmp_results[1],
-                            func(tmp_results[2],tmp_results[3])));
+        while(tmp_results.size() != 1){
+            result = func(tmp_results.back(),tmp_results[tmp_results.size()-2]);
+            tmp_results.resize(tmp_results.size()-2);
+            tmp_results.push_back(result);
+
+        }
     }
     else
     {
