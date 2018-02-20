@@ -12,19 +12,20 @@ template<class T>
 class BufferedChannel {
 public:
     explicit BufferedChannel(int size): size_(size) {
-    	isClosed.store(false);
+		isclosed_.store(false);
         currentsize_ = 0;
     }
+
     void send(const T& value) {
-    	if(isClosed.load()){
+    	if(isclosed_.load()){
     		throw std::runtime_error("Channel closed"); 
     	}
     	std::unique_lock<std::mutex> lock(mutex_);
     	cv_.wait(lock, [this](){
-    			return currentsize_ < size_ || isClosed.load();
+    			return currentsize_ < size_ || isclosed_.load();
     		});
 
-    	if(isClosed.load()){
+    	if(isclosed_.load()){
     		throw std::runtime_error("Channel closed"); 
     	}
     	channel_.push(value);
@@ -35,9 +36,9 @@ public:
     std::pair<T, bool> recv() {
     	std::unique_lock<std::mutex> lock(mutex_);
     	cv_.wait(lock, [this](){
-    			return currentsize_ > 0 || isClosed.load();
+    			return currentsize_ > 0 || isclosed_.load();
     		});
-    	if(isClosed.load() && currentsize_ == 0){
+    	if(isclosed_.load() && currentsize_ == 0){
     		return std::make_pair(T(), false);
     	}
     	auto retval = std::make_pair(channel_.front(),true);
@@ -47,7 +48,7 @@ public:
         return retval;
     }
     void close() {
-    	isClosed.store(true);
+		isclosed_.store(true);
     	cv_.notify_all();
     }
 
@@ -57,5 +58,5 @@ private:
 	std::queue<T> channel_;
 	std::mutex mutex_;
     std::condition_variable cv_;
-	std::atomic<bool> isClosed;
+	std::atomic<bool> isclosed_;
 };

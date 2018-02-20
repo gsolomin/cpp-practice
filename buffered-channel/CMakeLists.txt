@@ -13,4 +13,4 @@ add_executable(test_bufchannel test/test.cpp)
 target_link_libraries(test_bufchannel gtest gtest_main)
 #target_link_libraries(test_bufchannel buffered_channel_lib)
 
-add_benchmark(bench_reduce test/bench.cpp)
+add_benchmark(bench_bufchannel test/bench.cpp)
