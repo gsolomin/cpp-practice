@@ -14,6 +14,10 @@
 
   Use threads to speed up computing of сommutative and associative function.
   
+* **RW-lock**
+
+  Implement Reader-Writer Lock synchronization primitive.
+  
 * **Unbuffered-channel**
 
   Implement a unbuffered channel with *send* method synchronizes with *recieve* method
