@@ -10,6 +10,10 @@
 
   Implement function that receives string with arithmetic expression and return a result.
   
+* **LRU Cache**
+
+  Implement Least Recently Used Cache structure with limited size. 
+  
 * **Reduce**
 
   Use threads to speed up computing of сommutative and associative function.
